@@ -143,14 +143,7 @@ class SynonymHandler
         // add code here
         try {
             int index = synonymLineIndex(synonymData, word);
-            String[] newStringArray = synonymData[index].replace(" ", "").replace(word + "|", "").split(",");
-            newStringArray[newStringArray.length + 1] = synonym;
-            String newString = word + " | ";
-            for (int i = 0; i < newStringArray.length; i++) {
-                newString += newStringArray[i] + " ,";
-            }
-            newString = newString.substring(0, newString.length() - 1);
-            synonymData[index] = newString;
+            synonymData[index] += ", " + synonym;
         } catch (IllegalArgumentException e) {
             throw new IllegalArgumentException(word + " not present");
         }
@@ -169,11 +162,11 @@ class SynonymHandler
             String[] newStringArray = synonymData[index].replace(" ", "").replace(word + "|", "").split(",");
             String newString = word + " | ";
             for (int i = 0; i < newStringArray.length; i++) {
-                if (newStringArray[i] != synonym) {
-                    newString += newStringArray[i] + " ,";
+                if (!newStringArray[i].contains(synonym)) {
+                    newString += newStringArray[i] + ", ";
                 }
             }
-            newString = newString.substring(0, newString.length() - 1);
+            newString = newString.substring(0, newString.length() - 2);
             synonymData[index] = newString;
 
         } catch (IllegalArgumentException e) {
@@ -186,13 +179,24 @@ class SynonymHandler
     private static void sortIgnoreCase (String[] strings)
     {
         // add code here
+        Arrays.sort(strings);
 	}
 
     // sortSynonymLine accepts a synonym line, and sorts
     // the synonyms in this line
     private static String sortSynonymLine (String synonymLine)
     {
-	    // add code here
+        String[] synonymArray = synonymLine.replace(" ", "").replace("|", ",").split(",");
+        synonymArray[0] = "";
+        Arrays.sort(synonymArray);
+
+        String newString = "";
+        for (int i = 0; i < synonymArray.length; i++) {
+            if (synonymArray[i] != "") {
+                newString += synonymArray[i] + ", ";
+            }
+        }
+        return newString.substring(0, newString.length() - 2);
 	}
 
     // sortSynonymData accepts synonym data, and sorts its
@@ -200,5 +204,16 @@ class SynonymHandler
 	public static void sortSynonymData (String[] synonymData)
 	{
         // add code here
+        for (int i = 0; i < synonymData.length; i++) { // Loop each word is list
+
+            String[] split = synonymData[i].replace(" ", "").replace("|", ",").split(",");
+            
+            // Sort synonyms
+            synonymData[i] = split[0] + " | " + sortSynonymLine(synonymData[i]);
+        }
+
+        // Sort words
+        sortIgnoreCase(synonymData);
+        
 	}
 }

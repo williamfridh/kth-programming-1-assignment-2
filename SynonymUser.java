@@ -21,7 +21,7 @@ class SynonymUser
     public static void main (String[] args) throws IOException
     {
         String[] synonymData = SynonymHandler.readSynonymData(
-			"SynonymData1.txt"); // File 1 in production, file 3 in development.
+			"SynonymData1.txt");
         println(synonymData);
 
         String synonymLine = SynonymHandler.getSynonymLine(
