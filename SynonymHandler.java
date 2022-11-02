@@ -119,18 +119,19 @@ class SynonymHandler
 	public static String[] removeSynonymLine (String[] synonymData,
 	    String word)
 	{
-		// add code here
+		/* ========================================= STUDENT CODE ========================================= */
         try {
             List<String> stringArrayList = new ArrayList<String>();
-            for (int i = 0; i < synonymData.length; i++) {
-                if (!synonymData[i].contains(word + " | ")) {
-                    stringArrayList.add(synonymData[i]);
+            for (String line: synonymData) {
+                if (!line.contains(word + " | ")) {
+                    stringArrayList.add(line);
                 }
             }
             return stringArrayList.toArray(new String[stringArrayList.size()]);
         } catch (IllegalArgumentException e) {
             throw new IllegalArgumentException(word + " not present");
         }
+        /* ========================================= END STUDENT CODE ========================================= */
 	}
 
     // addSynonym accepts synonym data, and adds a given
@@ -140,13 +141,14 @@ class SynonymHandler
 	public static void addSynonym (String[] synonymData,
 	    String word, String synonym)
 	{
-        // add code here
+        /* ========================================= STUDENT CODE ========================================= */
         try {
-            int index = synonymLineIndex(synonymData, word);
-            synonymData[index] += ", " + synonym;
+            int i = synonymLineIndex(synonymData, word);
+            synonymData[i] += ", " + synonym;
         } catch (IllegalArgumentException e) {
             throw new IllegalArgumentException(word + " not present");
         }
+        /* ========================================= END STUDENT CODE ========================================= */
 	}
 
     // removeSynonym accepts synonym data, and removes a given
@@ -156,64 +158,90 @@ class SynonymHandler
 	public static void removeSynonym (String[] synonymData,
 	    String word, String synonym)
 	{
-        // add code here
+        /* ========================================= STUDENT CODE ========================================= */
         try {
+
             int index = synonymLineIndex(synonymData, word);
-            String[] newStringArray = synonymData[index].replace(" ", "").replace(word + "|", "").split(",");
-            String newString = word + " | ";
-            for (int i = 0; i < newStringArray.length; i++) {
-                if (!newStringArray[i].contains(synonym)) {
-                    newString += newStringArray[i] + ", ";
+
+            String[] newStringArray =
+                synonymData[index]
+                .replace(word, "") // Remove word
+                .replaceAll("[|\\s]", "") // Remove unwanted characters
+                .split(","); // Split into array
+
+            String newString = word + " | "; // Start building new string
+
+            for (String synonymTarget: newStringArray) {
+                if (!synonymTarget.equalsIgnoreCase(synonym)) {
+                    newString += synonymTarget + ", ";
                 }
             }
-            newString = newString.substring(0, newString.length() - 2);
+
+            newString = newString.substring(0, newString.length() - 2); // Remove last two characters (", ")
+
             synonymData[index] = newString;
 
         } catch (IllegalArgumentException e) {
             throw new IllegalArgumentException(word + " not present");
         }
+        /* ========================================= END STUDENT CODE ========================================= */
 	}
 
     // sortIgnoreCase sorts an array of strings, using
     // the selection sort algorithm
     private static void sortIgnoreCase (String[] strings)
     {
-        // add code here
-        Arrays.sort(strings);
+        /* ========================================= STUDENT CODE ========================================= */
+        Arrays.sort(strings, String.CASE_INSENSITIVE_ORDER);
+        /* ========================================= END STUDENT CODE ========================================= */
 	}
 
     // sortSynonymLine accepts a synonym line, and sorts
     // the synonyms in this line
     private static String sortSynonymLine (String synonymLine)
     {
-        String[] synonymArray = synonymLine.replace(" ", "").replace("|", ",").split(",");
+        /* ========================================= STUDENT CODE ========================================= */
+
+        // Split up data into array.
+        String[] synonymArray =
+            synonymLine
+            .replace(" ", "")
+            .split("[|,]");
+
+        // Clear array and sort.
         synonymArray[0] = "";
         Arrays.sort(synonymArray);
 
+        // Create new stirng.
         String newString = "";
-        for (int i = 0; i < synonymArray.length; i++) {
-            if (synonymArray[i] != "") {
-                newString += synonymArray[i] + ", ";
+        for (String synonym : synonymArray) {
+            if (synonym.length() > 0){
+                newString += synonym + ", ";
             }
         }
-        return newString.substring(0, newString.length() - 2);
+
+        newString = newString.substring(0, newString.length() - 2);
+
+        return newString;
+        /* ========================================= END STUDENT CODE ========================================= */
 	}
 
     // sortSynonymData accepts synonym data, and sorts its
     // synonym lines and the synonyms in these lines
 	public static void sortSynonymData (String[] synonymData)
 	{
-        // add code here
-        for (int i = 0; i < synonymData.length; i++) { // Loop each word is list
-
-            String[] split = synonymData[i].replace(" ", "").replace("|", ",").split(",");
-            
+        /* ========================================= STUDENT CODE ========================================= */
+        for (int i = 0; i < synonymData.length; i++) {
+            String[] split =
+            synonymData[i]
+                .replace(" ", "")
+                .split("[|,]");
             // Sort synonyms
             synonymData[i] = split[0] + " | " + sortSynonymLine(synonymData[i]);
         }
 
         // Sort words
         sortIgnoreCase(synonymData);
-        
+        /* ========================================= END STUDENT CODE ========================================= */
 	}
 }
