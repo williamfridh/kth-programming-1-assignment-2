@@ -192,7 +192,17 @@ class SynonymHandler
     private static void sortIgnoreCase (String[] strings)
     {
         /* ========================================= STUDENT CODE ========================================= */
-        Arrays.sort(strings, String.CASE_INSENSITIVE_ORDER);
+        String tmp;
+        for (int i = 0; i < strings.length; i++) { // Loop string array.
+            for (int j = i + 1; j < strings.length; j++) { // Loop string array.
+                if (strings[i].toLowerCase().compareTo(strings[j].toLowerCase()) > 0) {
+                    // Swap places.
+                    tmp = strings[i];
+                    strings[i] = strings[j];
+                    strings[j] = tmp;
+                }
+            }
+        }
         /* ========================================= END STUDENT CODE ========================================= */
 	}
 
@@ -210,7 +220,7 @@ class SynonymHandler
 
         // Clear array and sort.
         synonymArray[0] = "";
-        Arrays.sort(synonymArray);
+        sortIgnoreCase(synonymArray);
 
         // Create new stirng.
         String newString = "";
