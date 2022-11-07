@@ -195,7 +195,7 @@ class SynonymHandler
         String tmp;
         for (int i = 0; i < strings.length; i++) { // Loop string array.
             for (int j = i + 1; j < strings.length; j++) { // Loop string array.
-                if (strings[i].toLowerCase().compareTo(strings[j].toLowerCase()) > 0) {
+                if (strings[i].compareToIgnoreCase(strings[j]) > 0) {
                     // Swap places.
                     tmp = strings[i];
                     strings[i] = strings[j];
